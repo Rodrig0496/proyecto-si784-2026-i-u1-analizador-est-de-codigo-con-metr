@@ -50,3 +50,26 @@ async def upload_code_analysis(
         "complexity": report.complexity,
         "code_smells": report.code_smells,
     }
+
+
+@router.get("/history/{user_id}")
+async def get_analysis_history(
+    user_id: int,
+    db: Session = Depends(get_db),
+) -> list[dict[str, Any]]:
+    """Obtiene el historial de reportes de un usuario en formato lista JSON."""
+    repository = AnalysisRepository(db)
+    reports = repository.get_reports_by_user(user_id)
+
+    return [
+        {
+            "id": report.id,
+            "user_id": report.user_id,
+            "project_name": report.project_name,
+            "analysis_date": report.analysis_date.isoformat(),
+            "loc": report.loc,
+            "complexity": report.complexity,
+            "code_smells": report.code_smells,
+        }
+        for report in reports
+    ]

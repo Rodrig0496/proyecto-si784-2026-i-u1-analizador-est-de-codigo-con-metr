@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from app.persistencia.database.database import Base, engine
+from app.persistencia.models.models import User, AnalysisReport
 from app.presentacion.routers.analysis_router import router as analysis_router
 from app.presentacion.routers.auth_router import router as auth_router
 

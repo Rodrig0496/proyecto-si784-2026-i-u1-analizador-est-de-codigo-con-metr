@@ -1,9 +1,7 @@
-from passlib.context import CryptContext
+import bcrypt
 from sqlalchemy.orm import Session
 
 from app.persistencia.models.models import User
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class UserRepository:
@@ -19,7 +17,8 @@ class UserRepository:
 
         Retorna el usuario creado.
         """
-        password_hash = pwd_context.hash(password)
+        salt = bcrypt.gensalt()
+        password_hash = bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
 
         user = User(
             username=username,
